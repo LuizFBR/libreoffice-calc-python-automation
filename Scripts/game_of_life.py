@@ -56,12 +56,13 @@ def game_of_life(document):
 
     number_of_generations = 10000
     game_size = (15,15) # set the matrix the game will run in
-
+    time_between_generations = 0.25
 
     initial_config = [[0,1,0],
                       [0,0,1],
                       [1,1,1]]
 
+    
     game_grid, live_cells = adjust_game(game_size, initial_config)
     for row in game_grid:
         for cell in row:
@@ -79,7 +80,7 @@ def game_of_life(document):
     for gen in range(1,number_of_generations):
         parse_neighborhood(game_size, live_cells, neighbor_cells)
         live_cells.clear()
-        sleep(0.25)
+        sleep(time_between_generations)
         for cell in neighbor_cells:
             calcCell = active_sheet.getCellByPosition(cell[1],cell[0])
             if neighbor_cells[cell] < 2 or neighbor_cells[cell] > 3: # Then, by isolation or overpopulation, the cell dies
@@ -89,7 +90,7 @@ def game_of_life(document):
                 game_grid[cell[0]][cell[1]] = 1
                 live_cells.append(cell) 
                 calcCell.CellBackColor = 1200000 # color is marine blue
-            elif neighbor_cells[cell] == 2 and game_grid[cell[0]][cell[1]] == 1:
+            elif neighbor_cells[cell] == 2 and game_grid[cell[0]][cell[1]] == 1: # if cell was alive, it continues to live, therefore we must append it to our live_cells list
                 live_cells.append(cell)
         neighbor_cells.clear()
         print("Generation: {}".format(gen))
